@@ -4,12 +4,14 @@ import common_ports
 
 
 def get_open_ports(target, port_range, verbose_mode=False):
+    #Socket scanning port and append into list
     ip = ""
     open_ports = []
     hostnamenotfound = False
     try:
       ip = socket.gethostbyname(target)
       for port in range(port_range[0], port_range[1]+1):
+        #Initialize socket to connect
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         socket.setdefaulttimeout(1)
         
@@ -26,7 +28,7 @@ def get_open_ports(target, port_range, verbose_mode=False):
       return "Error: Invalid IP address"
     except socket.error:
       return "Error: Invalid IP address"
-
+    #Connect socket to get hostname/IPAddress
     host = None
     try:
       host = socket.gethostbyaddr(ip)[0]
@@ -34,13 +36,14 @@ def get_open_ports(target, port_range, verbose_mode=False):
       host = None
       hostnamenotfound = True
   
-    #returned_string = "Open port for"
+    #Returned verbose mode
     if not verbose_mode:
       print(open_ports)
       return (open_ports)
     else:
       returned_string = ""
       returned_string += f"Open ports for {host} ({ip})\n"
+      #If hostname not found, use IP adress as name
       if hostnamenotfound : 
         returned_string = f"Open ports for {ip}\n"
       returned_string += "PORT     SERVICE\n"
@@ -51,5 +54,5 @@ def get_open_ports(target, port_range, verbose_mode=False):
   
       return returned_string.rstrip("\n")
   
-    return (open_ports)
+    #return (open_ports)
   
